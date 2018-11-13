@@ -1,11 +1,15 @@
-from .models import User, find_user
-from flask import Flask, render_template, redirect, url_for
+from .models import User
+from flask import Flask, render_template, redirect, url_for, session
 from flask_login import LoginManager
 from .config import Config 
 from .forms import LoginForm, RegisterForm
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
+from flask_bootstrap import Bootstrap
 
+'''
+Can use session to store current user and all other kinds of shit.
+'''
 
 loginManager = LoginManager()
 app = Flask(__name__)
@@ -20,19 +24,15 @@ def index():
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     form = LoginForm()
-
     if form.validate_on_submit():
-        user = find_user(username=form.username.data)
-
+        user = User.find_user(username=form.username.data)
         if user:
-            if check_password_hash(user.password, form.password.data)
-            login_user(user, remember=form.remember.data)
+            if check_password_hash(user.password, form.password.data):
+                login_user(user, remember=form.remember.data)
             
             # figure out where to redirect to after this
             return redirect(url_for('dashboard'))
-
         return '<h1> Invalid Username or Password'
-
     return render_template('login.html', form=form)
 
 @app.route('/register', methods=['GET', 'POST'])
@@ -73,9 +73,9 @@ def profile():
 @app.route('/profile/<username>')
 @login_required
 def profile(username):
-    user = find_user(username=username)
+    user = User.find_user(username=username)
     if user:
-        cur_user = find_user(username=current_user.username)
+        cur_user = User.find_user(username=current_user.username)
         if cur_user.friends_with(username):
             return render_template('friend.html')    
         return render_template('notfriend.html')
