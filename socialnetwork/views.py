@@ -54,4 +54,30 @@ def register():
         # Create HTML for postregistration
         return redirect(url_for('postregistration'))
 
+@app.route('/dashboard')
+@login_required
+def dashboard():
+    return render_template('dashboard.html', name=current_user.username)
+
+@app.route('/logout')
+@login_required 
+def logout():
+    logout_user()
+    return redirect(url_for('index'))
+
+@app.route('/profile')
+@login_required
+def profile():
+    return render_template('profile.html', user=current_user)
+
+@app.route('/profile/<username>')
+@login_required
+def profile(username):
+    user = find_user(username=username)
+    if user:
+        cur_user = find_user(username=current_user.username)
+        if cur_user.friends_with(username):
+            return render_template('friend.html')    
+        return render_template('notfriend.html')
+
 

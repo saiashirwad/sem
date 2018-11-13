@@ -45,8 +45,19 @@ class User:
             return True 
         else:
             return False
-
     
+    def friends_with(self, username):
+        query = '''
+        match (u1:User)-[rel]-(u2:User) 
+        where u1.name='{}'and u2.name='{}' 
+        return type(rel) as type
+        '''.format(self.username, username)
+
+        result = graph.run(query)
+        if result.data()[0]['type'] == 'FRIENDS_WITH':
+            return True 
+        return False
+
 def find_user(username):
-    user = graph.nodes.match('User', 'username', username).first()
+    return graph.nodes.match('User', 'username', username).first()
     
