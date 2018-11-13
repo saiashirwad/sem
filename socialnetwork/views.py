@@ -77,7 +77,21 @@ def profile(username):
     if user:
         cur_user = User.find_user(username=current_user.username)
         if cur_user.friends_with(username):
-            return render_template('friend.html')    
-        return render_template('notfriend.html')
+            return render_template('friend.html', user=user)    
+        return render_template('notfriend.html', user=user)
+
+@app.route('/friendrequest/<username>')
+@login_required
+def send_friend_request(username):
+    user = User.find_user(username=username)
+    cur_user = User.find_user(username=current_user.username)
+    cur_user.request_friendship(username)
+
+    return render_template('friend.html', user)
+
+    
+
+
+
 
 

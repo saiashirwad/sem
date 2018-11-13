@@ -30,3 +30,4 @@ class CommentForm(FlaskForm):
 class ChangePasswordForm(FlaskForm):
     previousPassword = PasswordField('Previous Password', validators=[InputRequired(), Length(min=8, max=20)])
     newPassword = PasswordField('New Password', validators=[InputRequired(), Length(min=8, max=20)])
+

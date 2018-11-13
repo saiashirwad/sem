@@ -106,6 +106,9 @@ class User:
 
         except Exception as e:
             return e
+    
+    def request_friendship(self, user_id):
+        pass
 
 
 ###################################### POST ##############################################
