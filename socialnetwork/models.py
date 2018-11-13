@@ -40,21 +40,24 @@ class User:
         self.created = get_timestamp()
     
     def register(self):
-        if not self.find():
-            user = Node(
-                'User',
-                username=self.username,
-                lastname=self.lastname, 
-                gender=self.gender, 
-                dob=self.dob,
-                email=self.email,
-                username=self.username, 
-                password=self.password 
-            )
-            graph.create(user)
-            return True 
-        else:
-            return False
+        try:
+            if not self.find():
+                user = Node(
+                    'User',
+                    username=self.username,
+                    lastname=self.lastname, 
+                    gender=self.gender, 
+                    dob=self.dob,
+                    email=self.email,
+                    username=self.username, 
+                    password=self.password 
+                )
+                graph.create(user)
+                return True 
+            else:
+                return False
+        except Exception as e:
+            return e 
     
     @staticmethod
     def find_user(username):
