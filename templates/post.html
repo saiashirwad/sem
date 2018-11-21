@@ -1,0 +1,73 @@
+{% extends 'bootstrap/base.html' %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block navbar %}
+<html>
+<link rel="stylesheet" media="screen" href = "{{ url_for('static', filename='bootstrap.min.css') }}">
+<meta name="viewport" content = "width=device-width, initial-scale=1.0">
+<head>
+</head>
+
+<body class = "body">
+<nav class="navbar navbar-default" role="navigation">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <a class="navbar-brand" href="/logout">Logout</a>
+      <a class="navbar-brand" href="/create_post">New Post</a>
+      <a class="navbar-brand" href="/dashboard">Dashboard</a>
+    </div>
+  </div>
+</nav>
+{% endblock %}
+{% block styles %}
+{{ super() }}
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+{% endblock %}
+
+
+{% block title %}
+Post
+{% endblock %}
+
+
+{% block content %}
+
+<div class="container">
+  <div class="row">
+    <div class="col-xs-12">
+
+      <div class="jumbotron">
+        <h3><a href = {{ url_for('show_post' ,id=post.id) }}> {{ post.title }} </a></h3>
+        <p>{{ post.text }}</p>
+
+        <div class="btn-group" role="group" aria-label="Basic example"></div>
+          {% for tag in post.tags %}
+          <button type="button" class="btn btn-secondary">
+            <a href="#">{{ tag }}</a>
+          </button>
+          {% endfor %}
+        </div>
+
+        {% if comments != None %}
+        <ul class="list-group">
+            {% for comment in comments %}
+                <li class="list-group-item">
+                    <a href = {{ url_for('profile', username=comment.creator ) }}>
+                       @{{ comment.creator }}
+                    </a> says: {{ comment.text }}
+
+                </li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+
+        {{ wtf.quick_form(form) }}
+        
+      </div>
+
+    </div>
+  </div>
+</div>
+
+{% endblock %}
